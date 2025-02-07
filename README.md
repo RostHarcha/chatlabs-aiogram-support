@@ -1,6 +1,6 @@
 # ChatLabs Aiogram Support
 
-## ChatLabs Aiogram Support - Установка
+## Установка
 
 `pip install chatlabs-aiogram-support`
 
