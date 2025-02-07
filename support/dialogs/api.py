@@ -8,9 +8,13 @@ from ..settings import BACKEND_URL
 
 class APIModel(BaseModel):
     @classmethod
+    def _get_client(cls):
+        return aiohttp.ClientSession(BACKEND_URL)
+
+    @classmethod
     async def _api_get(cls, url: HttpUrl, **params):
         async with (
-            aiohttp.ClientSession(BACKEND_URL) as client,
+            cls._get_client() as client,
             client.get(url, params=params) as response,
         ):
             if not response.ok:
@@ -20,21 +24,19 @@ class APIModel(BaseModel):
     @classmethod
     async def _api_get_list(cls, url: HttpUrl, **params):
         async with (
-            aiohttp.ClientSession(BACKEND_URL) as client,
+            cls._get_client() as client,
             client.get(url, params=params) as response,
         ):
             if not response.ok:
                 return None
-            return TypeAdapter(list[cls]).validate_json(
-                await response.read()
-            )
+            return TypeAdapter(list[cls]).validate_json(await response.read())
 
     @classmethod
     async def _api_patch(cls, url: HttpUrl, params: dict | None = None, **body):
         if params is None:
             params = {}
         async with (
-            aiohttp.ClientSession(BACKEND_URL) as client,
+            cls._get_client() as client,
             client.patch(url, params=params, json=body) as response,
         ):
             if not response.ok:
@@ -51,7 +53,7 @@ class APIModel(BaseModel):
         if params is None:
             params = {}
         async with (
-            aiohttp.ClientSession(BACKEND_URL) as client,
+            cls._get_client() as client,
             client.post(url=url, params=params, json=body) as response,
         ):
             return cls.model_validate_json(await response.read())
@@ -75,12 +77,12 @@ class Ticket(APIModel):
 
     @classmethod
     async def api_get(cls, id: int):
-        return await cls._api_get(f'/support/tickets/{id}/')
+        return await cls._api_get(f'tickets/{id}/')
 
     @classmethod
     async def api_get_list(cls, user_id: int, resolved: bool):
         return await cls._api_get_list(
-            '/support/tickets/',
+            'tickets/',
             user_id=user_id,
             resolved=str(resolved).lower(),
         )
@@ -88,14 +90,14 @@ class Ticket(APIModel):
     @classmethod
     async def api_update(cls, id: int, **kwargs):
         return await cls._api_patch(
-            f'/support/tickets/{id}/',
+            f'tickets/{id}/',
             body=kwargs,
         )
 
     @classmethod
     async def api_create(cls, user_id: int, title: str):
         return await cls._api_create(
-            '/support/tickets/',
+            'tickets/',
             user_id=user_id,
             title=title,
         )
@@ -111,13 +113,11 @@ class Message(APIModel):
 
     @classmethod
     async def api_get_list(cls, ticket_id: int):
-        return await cls._api_get_list(
-            f'/support/tickets/{ticket_id}/messages/'
-        )
+        return await cls._api_get_list(f'tickets/{ticket_id}/messages/')
 
     @classmethod
     async def api_create(cls, ticket_id: int, text: str):
         return await cls._api_create(
-            f'/support/tickets/{ticket_id}/messages/',
+            f'tickets/{ticket_id}/messages/',
             text=text,
         )

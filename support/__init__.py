@@ -1,13 +1,3 @@
-from importlib.util import find_spec
-
-from ..exceptions import ModuleDependenciesError
-
-if not find_spec('aiogram'):
-    raise ModuleDependenciesError(
-        current_module='chatlabs_aiogram_support',
-        required_module='chatlabs-support[chatlabs_aiogram_support]',
-    )
-
 from aiogram_dialog.widgets.kbd import Start
 from aiogram_dialog.widgets.text import Const
 
@@ -27,3 +17,5 @@ __all__ = [
     'main_state',
     'states',
 ]
+
+__version__ = '0.1.1a0'

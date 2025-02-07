@@ -1,6 +1,6 @@
 from aiogram import Router
 
-from . import support, create_ticket
+from . import create_ticket, support
 
 dialog_router = Router()
 
