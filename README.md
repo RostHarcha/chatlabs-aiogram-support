@@ -8,6 +8,7 @@
 - `BACKEND_SCHEMA`
 - `BACKEND_HOST`
 - `BACKEND_PORT`
+- `BACKEND_SUPPORT_PATH`
 
 Добавление роутера поддержки в диспетчер:
 ```python
