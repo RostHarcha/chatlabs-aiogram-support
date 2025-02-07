@@ -18,4 +18,4 @@ __all__ = [
     'states',
 ]
 
-__version__ = '0.1.1a0'
+__version__ = '0.1.1'
