@@ -11,6 +11,7 @@ from ..api import Message, Ticket
 async def ticket_getter(dialog_manager: DialogManager, **_):
     ticket = Ticket.model_validate(dialog_manager.dialog_data['ticket'])
     messages = await Message.api_get_list(ticket.id)
+    messages.reverse()
     return {
         'ticket': ticket,
         'messages': messages,
