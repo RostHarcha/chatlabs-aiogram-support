@@ -74,6 +74,7 @@ class Ticket(APIModel):
     created_at: datetime
     title: str
     resolved: bool
+    viewed: bool
 
     @classmethod
     async def api_get(cls, id: int):
@@ -109,7 +110,6 @@ class Message(APIModel):
     ticket: int
     sender: str
     text: str
-    viewed: bool
 
     @classmethod
     async def api_get_list(cls, ticket_id: int):

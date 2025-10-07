@@ -12,10 +12,10 @@ SupportStartButton = Start(
 )
 
 __all__ = [
-    'StartButton',
+    'SupportStartButton',
     'dialog_router',
     'main_state',
     'states',
 ]
 
-__version__ = '0.1.3'
+__version__ = '0.2.0'
